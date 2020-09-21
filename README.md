@@ -20,31 +20,23 @@ This project makes use of three environments: develop, staging and production.
 
 The project includes integration tests using a Postman collection.
 
-In the Azure environment, create (3) service principals for each of the environment.
+In your Azure environment, I would recommend creating a service principal that can deploy resources to your subscription.
 
-For my project, I am using `mjr-068` as the prefix and a suffix of the resource type, e.g. `-sp` for service principal.
+I am using `mjr-068` as the prefix and a suffix of the resource type, e.g. `-sp` for service principal.
 
 Use your own naming standards.
 
-The (3) service principals I created are as follows:
+The service principal I created was called `mjr-068-sp`.
 
-* Develop `mjr-068-dev-sp`
-* Staging `mjr-068-stg-sp`
-* Production `mjr-068-prd-sp`
+To create the service principal run `az ad sp create-for-rbac --name SERVICE_PRINCIPAL_NAME`, replacing `SERVICE_PRINCIPAL_NAME` with the name of your service principal.
 
-The following steps involve running Azure cli or PowerShell scripts from the command line, this can be accomplished from your favorite Terminal utility.
+Capture the output, as you will need this information for Azure DevOps and GitHub Actions.
 
-To create the service principals run `az ad sp create-for-rbac --name SERVICE_PRINCIPAL_NAME`, replacing `SERVICE_PRINCIPAL_NAME` with the name of the service principal for each environment.
-
-Capture the output for each, as you will need this information for future steps.
-
-To deploy the infrastructure, navigate to the src/FunctionApp1.Infrastructure folder and run the following script for the develop environment:
+To deploy the infrastructure, navigate to the `/src/FunctionApp1.Infrastructure` folder and run the following script for the develop environment:
 
 ```bash
-.\Deploy.ps1 -ResourcePrefix RESOURCE_PREFIX -UserPrincipalId USER_PRINCIPAL_ID
+.\Deploy.ps1 -ResourcePrefix RESOURCE_PREFIX
 ```
-
-USER_PRINCIPAL_ID should be your Id, or the Id of the context your are running the scripts in, and can be found by running `Get-AzADUser -UserPrincipalName (Get-AzContext).Account.Id`.
 
 ## Links
 

@@ -5,7 +5,7 @@
         "resourcePrefix": {
             "type": "String"
         },
-        "userPrincipalId": {
+        "servicePrincipalId": {
             "type": "String"
         }
     },
@@ -65,7 +65,7 @@
                 "accessPolicies": [
                     {
                         "tenantId": "[subscription().tenantId]",
-                        "objectId": "[parameters('userPrincipalId')]",
+                        "objectId": "[parameters('servicePrincipalId')]",
                         "permissions": {
                             "keys": [
                                 "get",

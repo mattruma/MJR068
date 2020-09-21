@@ -1,6 +1,7 @@
 Param(
     [String] [Parameter(Mandatory = $true)] $ResourcePrefix,
     [String] $ResourceGroupLocation = "eastus",
+    [String] [Parameter(Mandatory = $true)] $ServicePrincipalName,
     [String] $TemplateFile = "Deploy.json"
 )
 
@@ -8,7 +9,15 @@ $ErrorActionPreference = "Stop"
 
 $AzContext = Get-AzContext
 
-Write-Host "Subscription              : $($AzContext.Name)"
+Write-Host "Subscription            : $($AzContext.Name)"
+
+$ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
+
+if ($null -eq $ServicePrincipal) { 
+    throw "The service principal $($ServicePrincipalName) doest not exist."
+}
+
+Write-Host "Service Principal Id    : $($ServicePrincipal.Id)"
 
 $ResourceGroupName = "$($ResourcePrefix)-rg"
 $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
@@ -19,18 +28,8 @@ if ($null -eq $ResourceGroup) {
         -Location $ResourceGroupLocation)
 }
 
-Write-Host "Resource Group            : $($ResourceGroup.ResourceGroupName)"
-Write-Host "Resource Group Location   : $($ResourceGroup.Location)"
-
-$ServicePrincipalName = "$($ResourcePrefix)-sp"
-
-$ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
-
-if ($null -eq $ServicePrincipal) {    
-    az ad sp create-for-rbac --name $ServicePrincipalName 
-
-    $ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
-}
+Write-Host "Resource Group          : $($ResourceGroup.ResourceGroupName)"
+Write-Host "Resource Group Location : $($ResourceGroup.Location)"
 
 New-AzResourceGroupDeployment `
     -Name ((Get-ChildItem $TemplateFile).BaseName + "-" + ((Get-Date).ToUniversalTime()).ToString("MMdd-HHmm")) `
@@ -39,4 +38,4 @@ New-AzResourceGroupDeployment `
     -Force `
     -Verbose `
     -resourcePrefix $ResourcePrefix `
-    -userPrincipalId $ServicePrincipal.Id
+    -servicePrincipalId $ServicePrincipal.Id
