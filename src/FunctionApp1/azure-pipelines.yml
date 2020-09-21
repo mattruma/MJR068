@@ -76,63 +76,63 @@ stages:
           ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
           azurePowerShellVersion: LatestVersion   
 
-    # - deployment: DeployCode
-    #   displayName: Deploy code
-    #   dependsOn: DeployInfrastructure
-    #   environment: 'Develop'
+    - deployment: DeployCode
+      displayName: Deploy code
+      dependsOn: DeployInfrastructure
+      environment: 'Develop'
 
-    #   strategy:
-    #     runOnce:
-    #       deploy:
+      strategy:
+        runOnce:
+          deploy:
 
-    #         steps:
+            steps:
 
-    #         - task: DownloadBuildArtifacts@0
-    #           inputs:
-    #             downloadPath: '$(Build.ArtifactStagingDirectory)'
-    #             buildType: 'current'
-    #             artifactName: 'drop'
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+                buildType: 'current'
+                artifactName: 'drop'
 
-    #         - task: AzureFunctionApp@1
-    #           displayName: 'Deploy function app'
-    #           inputs:
-    #             azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-    #             appType: 'functionApp'
-    #             appName: '$(ResourcePrefix)-dev-func'
-    #             appSettings: '-StorageConnectionString $(StorageConnectionString1)'
-    #             package: $(System.ArtifactsDirectory)/**/*.zip     
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy function app'
+              inputs:
+                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                appType: 'functionApp'
+                appName: '$(ResourcePrefix)-dev-func'
+                appSettings: '-StorageConnectionString $(StorageConnectionString1)'
+                package: $(System.ArtifactsDirectory)/**/*.zip     
 
-    # - job: RunIntegrationTests
-    #   displayName: Run integration tests
-    #   dependsOn: DeployCode
-    #   variables:
-    #   - name: FunctionUrl
-    #     value: '$(ResourcePrefix)-dev-func.azurewebsites.net'
+    - job: RunIntegrationTests
+      displayName: Run integration tests
+      dependsOn: DeployCode
+      variables:
+      - name: FunctionUrl
+        value: '$(ResourcePrefix)-dev-func.azurewebsites.net'
 
-    #   steps:
+      steps:
 
-    #     - task: PowerShell@2
-    #       displayName: 'Create parameters file'
-    #       inputs:
-    #         targetType: 'filePath'
-    #         filePath: '$(System.DefaultWorkingDirectory)/src/FunctionApp1/RunIntegrationTests_CreateParametersFile.ps1'            
-    #         arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
-    #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - task: PowerShell@2
+          displayName: 'Create parameters file'
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/drop/RunIntegrationTests_CreateParametersFile.ps1'            
+            arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
 
-    #     - script: 'npm install newman'
-    #       displayName: 'Install newman'
-    #       workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - script: 'npm install newman'
+          displayName: 'Install newman'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
         
-    #     - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
-    #       displayName: 'Run postman tests'
-    #       workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
+          displayName: 'Run postman tests'
+          workingDirectory: '$(System.DefaultWorkingDirectory)'
 
-    #     - task: PublishTestResults@2
-    #       displayName: 'Publish test results'
-    #       inputs:
-    #         testResultsFiles: 'JunitReport.xml '
-    #         searchFolder: '$(System.DefaultWorkingDirectory)'
-    #         failTaskOnFailedTests: true
+        - task: PublishTestResults@2
+          displayName: 'Publish test results'
+          inputs:
+            testResultsFiles: 'JunitReport.xml '
+            searchFolder: '$(System.DefaultWorkingDirectory)'
+            failTaskOnFailedTests: true
 
   # - stage: Staging
   #   dependsOn: Develop
