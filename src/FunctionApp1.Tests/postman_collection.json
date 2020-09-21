@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "1500571b-8433-457b-8aee-a4d914f81a6e",
-		"name": "FunctionApp1.Tests",
+		"_postman_id": "787d8108-d445-422d-9861-73e7fea82647",
+		"name": "MJR068",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -30,14 +30,51 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://{{FunctionUrl}}/api/GameList?code={{FunctionCode}}",
-					"protocol": "https",
+					"raw": "{{FunctionUrl}}/api/GameListHttpTrigger?code={{FunctionCode}}",
 					"host": [
 						"{{FunctionUrl}}"
 					],
 					"path": [
 						"api",
-						"GameList"
+						"GameListHttpTrigger"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{FunctionCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game Import",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f4680da5-ee73-4d50-8e2b-9035df824f57",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{FunctionUrl}}/api/GameImportHttpTrigger?code={{FunctionCode}}",
+					"host": [
+						"{{FunctionUrl}}"
+					],
+					"path": [
+						"api",
+						"GameImportHttpTrigger"
 					],
 					"query": [
 						{
