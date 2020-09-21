@@ -32,6 +32,20 @@ The (3) service principals I created are as follows:
 * Staging `mjr-068-stg-sp`
 * Production `mjr-068-prd-sp`
 
-To create the service principals navigate to https://shell.azure.com and run `az ad sp create-for-rbac --name SERVICE_PRINCIPAL_NAME`, replacing `SERVICE_PRINCIPAL_NAME` with the name of the service principal for each environment.
+The following steps involve running Azure cli or PowerShell scripts from the command line, this can be accomplished from your favorite Terminal utility.
+
+To create the service principals run `az ad sp create-for-rbac --name SERVICE_PRINCIPAL_NAME`, replacing `SERVICE_PRINCIPAL_NAME` with the name of the service principal for each environment.
 
 Capture the output for each, as you will need this information for future steps.
+
+To deploy the infrastructure, navigate to the src/FunctionApp1.Infrastructure folder and run the following script for the develop environment:
+
+```bash
+.\Deploy.ps1 -ResourcePrefix RESOURCE_PREFIX -UserPrincipalId USER_PRINCIPAL_ID
+```
+
+USER_PRINCIPAL_ID should be your Id, or the Id of the context your are running the scripts in, and can be found by running `Get-AzADUser -UserPrincipalName (Get-AzContext).Account.Id`.
+
+## Links
+
+[Creating an Azure Service Principal for use with an Azure Resource Manager service connection](https://azuredevopslabs.com/labs/devopsserver/azureserviceprincipal/)

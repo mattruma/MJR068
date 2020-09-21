@@ -1,0 +1,54 @@
+{
+	"info": {
+		"_postman_id": "1500571b-8433-457b-8aee-a4d914f81a6e",
+		"name": "FunctionApp1.Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Game List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "683af52e-b970-4fb3-a1ea-62fcf631b345",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response must be valid and have a body\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"    var jsonData = JSON.parse(responseBody);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{FunctionUrl}}/api/GameList?code={{FunctionCode}}",
+					"protocol": "https",
+					"host": [
+						"{{FunctionUrl}}"
+					],
+					"path": [
+						"api",
+						"GameList"
+					],
+					"query": [
+						{
+							"key": "code",
+							"value": "{{FunctionCode}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
