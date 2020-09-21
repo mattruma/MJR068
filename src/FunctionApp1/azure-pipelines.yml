@@ -61,6 +61,7 @@ stages:
       displayName: Deploy infrastructure
 
       steps:
+
       - task: DownloadBuildArtifacts@0
         inputs:
           buildType: 'current'
@@ -110,6 +111,13 @@ stages:
         value: '$(ResourcePrefix)-dev-func.azurewebsites.net'
 
       steps:
+        
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.DefaultWorkingDirectory)'
 
         - task: PowerShell@2
           displayName: 'Create parameters file'
