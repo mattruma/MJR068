@@ -61,6 +61,12 @@ stages:
       displayName: Deploy infrastructure
 
       steps:
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.ArtifactsDirectory)'
 
       - task: AzurePowerShell@5
         displayName: 'Deploy infrastructure'
