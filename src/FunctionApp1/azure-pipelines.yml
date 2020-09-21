@@ -49,26 +49,26 @@ stages:
           ArtifactName: 'drop'
           publishLocation: 'Container'
 
-  # - stage: Develop
-  #   dependsOn: Build
+  - stage: Develop
+    dependsOn: Build
 
-  #   variables:
-  #   - group: Develop
+    variables:
+    - group: Develop
 
-  #   jobs:      
+    jobs:      
 
-  #   - job: DeployInfrastructure
-  #     displayName: Deploy infrastructure
+    - job: DeployInfrastructure
+      displayName: Deploy infrastructure
 
-  #     steps:
+      steps:
 
-  #     - task: AzurePowerShell@5
-  #       displayName: 'Deploy infrastructure'
-  #       inputs:
-  #         azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-  #         ScriptPath: '$(System.DefaultWorkingDirectory)/src/FunctionApp1.Infrastructure/Deploy.ps1'
-  #         ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/src/FunctionApp1.Infrastructure/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
-  #         azurePowerShellVersion: LatestVersion   
+      - task: AzurePowerShell@5
+        displayName: 'Deploy infrastructure'
+        inputs:
+          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          ScriptPath: '$(System.DefaultWorkingDirectory)/Deploy.ps1'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          azurePowerShellVersion: LatestVersion   
 
     # - deployment: DeployCode
     #   displayName: Deploy code
