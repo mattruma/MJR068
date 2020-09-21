@@ -1,7 +1,6 @@
 Param(
     [String] [Parameter(Mandatory = $true)] $ResourcePrefix,
     [String] $ResourceGroupLocation = "eastus",
-    [String] [Parameter(Mandatory = $true)] $UserPrincipalId,
     [String] $TemplateFile = "Deploy.json"
 )
 
