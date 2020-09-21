@@ -23,6 +23,16 @@ if ($null -eq $ResourceGroup) {
 Write-Host "Resource Group            : $($ResourceGroup.ResourceGroupName)"
 Write-Host "Resource Group Location   : $($ResourceGroup.Location)"
 
+$ServicePrincipalName = "$($ResourcePrefix)-sp"
+
+$ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
+
+if ($null -eq $ServicePrincipal) {    
+    az ad sp create-for-rbac --name $ServicePrincipalName 
+
+    $ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
+}
+
 New-AzResourceGroupDeployment `
     -Name ((Get-ChildItem $TemplateFile).BaseName + "-" + ((Get-Date).ToUniversalTime()).ToString("MMdd-HHmm")) `
     -ResourceGroupName $ResourceGroupName `
@@ -30,4 +40,4 @@ New-AzResourceGroupDeployment `
     -Force `
     -Verbose `
     -resourcePrefix $ResourcePrefix `
-    -userPrincipalId $UserPrincipalId
+    -userPrincipalId $ServicePrincipal.Id
