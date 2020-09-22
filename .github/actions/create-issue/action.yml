@@ -1,0 +1,24 @@
+name: 'Create a GitHub Issue'
+description: 'Creates a GitHub issue.'
+inputs:
+  token:
+    description: 'The GitHub access token.'
+    required: true
+  title:
+    description: 'The title of the issue.'
+    required: true
+  labels:
+    description: 'Comma separated list of labels to associate with this issue.'
+    required: false
+  assignees:
+    description: 'Comma separated list of logins for the users that this issue should be assigned to.'
+    required: false
+  body:
+    description: 'The contents of the issue.'
+    required: false
+outputs:
+  issue:
+    description: 'The created issue.'
+runs:
+  using: 'node12'
+  main: 'index.js'
