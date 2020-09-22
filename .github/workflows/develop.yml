@@ -40,6 +40,7 @@ jobs:
               Throw "The service principal $($ServicePrincipalName) does not exist."
           }
 
+          Write-Host $ServicePrincipal.Id
           Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipal.Id"
         azPSVersion: '3.1.0'        
     - uses: azure/arm-deploy@v1
