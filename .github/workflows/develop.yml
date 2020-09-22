@@ -41,9 +41,11 @@ jobs:
           }
 
           Write-Host $ServicePrincipal.Id
-          Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipal.Id"
+
+          $ServicePrincipalId = $ServicePrincipal.Id
+          Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipalId"
         azPSVersion: '3.1.0'             
-    - run: Write-Output "The SERVICE_PRINCIPALID is $env:SERVICE_PRINCIPALID"
+    - run: echo "$env:SERVICE_PRINCIPALID"
     - uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
