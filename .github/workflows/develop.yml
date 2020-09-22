@@ -45,13 +45,13 @@ jobs:
           $ServicePrincipalId = $ServicePrincipal.Id
           Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipalId"
         azPSVersion: '3.1.0'             
-    - run: echo "$env:SERVICE_PRINCIPALID"
+    - run: echo "$SERVICE_PRINCIPALID"
     - uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
         resourceGroupName: mjr-068-dev-rg
         template: ./src/FunctionApp1.Infrastructure/Deploy.json
-        parameters: resourcePrefix=mjr-068-dev servicePrincipalId=f8aea3fa-34c6-4986-b09c-590e32602418
+        parameters: resourcePrefix=mjr-068-dev servicePrincipalId=$SERVICE_PRINCIPALID
         
   deploy-code:
 
@@ -68,7 +68,7 @@ jobs:
        shell: pwsh
        run: |
          pushd './.'
-         dotnet build --configuration Release --output ./output
+         dotnet build './src/FunctionApp1/*.csproj' --configuration Release --output ./output
          popd
      - uses: Azure/login@v1
        with:
