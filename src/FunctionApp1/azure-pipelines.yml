@@ -142,160 +142,188 @@ stages:
             searchFolder: '$(System.DefaultWorkingDirectory)/drop'
             failTaskOnFailedTests: true
 
-  # - stage: Staging
-  #   dependsOn: Develop
+  - stage: Staging
+    dependsOn: Develop
 
-  #   variables:
-  #   - group: Staging
+    variables:
+    - group: Staging
 
-  #   jobs:      
+    jobs:      
 
-  #   - job: DeployInfrastructure
-  #     displayName: Deploy infrastructure
+    - job: DeployInfrastructure
+      displayName: Deploy infrastructure
 
-  #     steps:
+      steps:
 
-  #     - task: AzurePowerShell@5
-  #       displayName: 'Deploy infrastructure'
-  #       inputs:
-  #         azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-  #         ScriptPath: '$(System.DefaultWorkingDirectory)/Deploy.ps1'
-  #         ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-stg -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
-  #         azurePowerShellVersion: LatestVersion   
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
 
-  #   - deployment: DeployCode
-  #     displayName: Deploy code
-  #     dependsOn: DeployInfrastructure
-  #     environment: 'Staging'
+      - task: AzurePowerShell@5
+        displayName: 'Deploy infrastructure'
+        inputs:
+          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          azurePowerShellVersion: LatestVersion   
 
-  #     strategy:
-  #       runOnce:
-  #         deploy:
+    - deployment: DeployCode
+      displayName: Deploy code
+      dependsOn: DeployInfrastructure
+      environment: 'Staging'
 
-  #           steps:
+      strategy:
+        runOnce:
+          deploy:
 
-  #           - task: DownloadBuildArtifacts@0
-  #             inputs:
-  #               downloadPath: '$(Build.ArtifactStagingDirectory)'
-  #               buildType: 'current'
-  #               artifactName: 'drop'
+            steps:
 
-  #           - task: AzureFunctionApp@1
-  #             displayName: 'Deploy function app'
-  #             inputs:
-  #               azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-  #               appType: 'functionApp'
-  #               appName: '$(ResourcePrefix)-stg-func'
-  #               appSettings: '-StorageConnectionString $(StorageConnectionString1)'
-  #               package: $(System.ArtifactsDirectory)/**/*.zip     
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+                buildType: 'current'
+                artifactName: 'drop'
 
-  #   - job: RunIntegrationTests
-  #     displayName: Run integration tests
-  #     dependsOn: DeployCode
-  #     variables:
-  #     - name: FunctionUrl
-  #       value: '$(ResourcePrefix)-stg-func.azurewebsites.net'
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy function app'
+              inputs:
+                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                appType: 'functionApp'
+                appName: '$(ResourcePrefix)-stg-func'
+                appSettings: '-StorageConnectionString $(StorageConnectionString1)'
+                package: $(System.ArtifactsDirectory)/**/*.zip     
 
-  #     steps:
+    - job: RunIntegrationTests
+      displayName: Run integration tests
+      dependsOn: DeployCode
+      variables:
+      - name: FunctionUrl
+        value: '$(ResourcePrefix)-stg-func.azurewebsites.net'
 
-  #       - task: PowerShell@2
-  #         displayName: 'Create parameters file'
-  #         inputs:
-  #           targetType: 'filePath'
-  #           filePath: '$(System.DefaultWorkingDirectory)/RunIntegrationTests_CreateParametersFile.ps1'            
-  #           arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)'
-
-  #       - script: 'npm install newman'
-  #         displayName: 'Install newman'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+      steps:
         
-  #       - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
-  #         displayName: 'Run postman tests'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.DefaultWorkingDirectory)'
 
-  #       - task: PublishTestResults@2
-  #         displayName: 'Publish test results'
-  #         inputs:
-  #           testResultsFiles: 'JunitReport.xml '
-  #           searchFolder: '$(System.DefaultWorkingDirectory)'
-  #           failTaskOnFailedTests: true
-            
-  # - stage: Production
-  #   dependsOn: Staging
+        - task: PowerShell@2
+          displayName: 'Create parameters file'
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/drop/RunIntegrationTests_CreateParametersFile.ps1'            
+            arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
-  #   variables:
-  #   - group: Production
-
-  #   jobs:      
-
-  #   - job: DeployInfrastructure
-  #     displayName: Deploy infrastructure
-
-  #     steps:
-
-  #     - task: AzurePowerShell@5
-  #       displayName: 'Deploy infrastructure'
-  #       inputs:
-  #         azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-  #         ScriptPath: '$(System.DefaultWorkingDirectory)/Deploy.ps1'
-  #         ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-prd -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
-  #         azurePowerShellVersion: LatestVersion   
-
-  #   - deployment: DeployCode
-  #     displayName: Deploy code
-  #     dependsOn: DeployInfrastructure
-  #     environment: 'Staging'
-
-  #     strategy:
-  #       runOnce:
-  #         deploy:
-
-  #           steps:
-
-  #           - task: DownloadBuildArtifacts@0
-  #             inputs:
-  #               downloadPath: '$(Build.ArtifactStagingDirectory)'
-  #               buildType: 'current'
-  #               artifactName: 'drop'
-
-  #           - task: AzureFunctionApp@1
-  #             displayName: 'Deploy function app'
-  #             inputs:
-  #               azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
-  #               appType: 'functionApp'
-  #               appName: '$(ResourcePrefix)-prd-func'
-  #               appSettings: '-StorageConnectionString $(StorageConnectionString1)'
-  #               package: $(System.ArtifactsDirectory)/**/*.zip     
-
-  #   - job: RunIntegrationTests
-  #     displayName: Run integration tests
-  #     dependsOn: DeployCode
-  #     variables:
-  #     - name: FunctionUrl
-  #       value: '$(ResourcePrefix)-prd-func.azurewebsites.net'
-
-  #     steps:
-
-  #       - task: PowerShell@2
-  #         displayName: 'Create parameters file'
-  #         inputs:
-  #           targetType: 'filePath'
-  #           filePath: '$(System.DefaultWorkingDirectory)/RunIntegrationTests_CreateParametersFile.ps1'            
-  #           arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)'
-
-  #       - script: 'npm install newman'
-  #         displayName: 'Install newman'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - script: 'npm install newman'
+          displayName: 'Install newman'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
         
-  #       - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
-  #         displayName: 'Run postman tests'
-  #         workingDirectory: '$(System.DefaultWorkingDirectory)'
+        - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
+          displayName: 'Run postman tests'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
-  #       - task: PublishTestResults@2
-  #         displayName: 'Publish test results'
-  #         inputs:
-  #           testResultsFiles: 'JunitReport.xml '
-  #           searchFolder: '$(System.DefaultWorkingDirectory)'
-  #           failTaskOnFailedTests: true
+        - task: PublishTestResults@2
+          displayName: 'Publish test results'
+          inputs:
+            testResultsFiles: 'JunitReport.xml '
+            searchFolder: '$(System.DefaultWorkingDirectory)/drop'
+            failTaskOnFailedTests: true
+
+  - stage: Production
+    dependsOn: Staging
+
+    variables:
+    - group: Production
+
+    jobs:      
+
+    - job: DeployInfrastructure
+      displayName: Deploy infrastructure
+
+      steps:
+
+      - task: DownloadBuildArtifacts@0
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'drop'
+          downloadPath: '$(System.DefaultWorkingDirectory)'
+
+      - task: AzurePowerShell@5
+        displayName: 'Deploy infrastructure'
+        inputs:
+          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-prd -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          azurePowerShellVersion: LatestVersion   
+
+    - deployment: DeployCode
+      displayName: Deploy code
+      dependsOn: DeployInfrastructure
+      environment: 'Production'
+
+      strategy:
+        runOnce:
+          deploy:
+
+            steps:
+
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                downloadPath: '$(Build.ArtifactStagingDirectory)'
+                buildType: 'current'
+                artifactName: 'drop'
+
+            - task: AzureFunctionApp@1
+              displayName: 'Deploy function app'
+              inputs:
+                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                appType: 'functionApp'
+                appName: '$(ResourcePrefix)-prd-func'
+                appSettings: '-StorageConnectionString $(StorageConnectionString1)'
+                package: $(System.ArtifactsDirectory)/**/*.zip     
+
+    - job: RunIntegrationTests
+      displayName: Run integration tests
+      dependsOn: DeployCode
+      variables:
+      - name: FunctionUrl
+        value: '$(ResourcePrefix)-prd-func.azurewebsites.net'
+
+      steps:
+        
+        - task: DownloadBuildArtifacts@0
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: 'drop'
+            downloadPath: '$(System.DefaultWorkingDirectory)'
+
+        - task: PowerShell@2
+          displayName: 'Create parameters file'
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/drop/RunIntegrationTests_CreateParametersFile.ps1'            
+            arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
+
+        - script: 'npm install newman'
+          displayName: 'Install newman'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
+        
+        - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
+          displayName: 'Run postman tests'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
+
+        - task: PublishTestResults@2
+          displayName: 'Publish test results'
+          inputs:
+            testResultsFiles: 'JunitReport.xml '
+            searchFolder: '$(System.DefaultWorkingDirectory)/drop'
+            failTaskOnFailedTests: true
