@@ -167,7 +167,7 @@ stages:
         inputs:
           azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
-          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-stg -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
           azurePowerShellVersion: LatestVersion   
 
     - deployment: DeployCode
