@@ -34,7 +34,7 @@ jobs:
                   -Location $ResourceGroupLocation)
           }
 
-          $ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
+          $ServicePrincipal = Get-AzADServicePrincipal -DisplayName "mjr-068-sp"
 
           If ($null -eq $ServicePrincipal) { 
               Throw "The service principal $($ServicePrincipalName) does not exist."
