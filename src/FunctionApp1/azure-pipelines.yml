@@ -229,14 +229,6 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
         - task: PowerShell@2
-          displayName: 'Verify $(ResourcePrefix)-prd-func.azurewebsites.net is running'
-          inputs:
-            targetType: 'filePath'
-            filePath: '$(System.DefaultWorkingDirectory)/drop/PingFunctionApp.ps1'            
-            arguments: '-FunctionUrl $(FunctionUrl)'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
-
-        - task: PowerShell@2
           displayName: 'Create parameters file'
           inputs:
             targetType: 'filePath'
@@ -328,6 +320,14 @@ stages:
             downloadType: 'single'
             artifactName: 'drop'
             downloadPath: '$(System.DefaultWorkingDirectory)'
+
+        - task: PowerShell@2
+          displayName: 'Verify $(ResourcePrefix)-prd-func.azurewebsites.net is running'
+          inputs:
+            targetType: 'filePath'
+            filePath: '$(System.DefaultWorkingDirectory)/drop/PingFunctionApp.ps1'            
+            arguments: '-FunctionUrl $(FunctionUrl)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
         - task: PowerShell@2
           displayName: 'Create parameters file'
