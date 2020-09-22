@@ -125,21 +125,21 @@ stages:
             targetType: 'filePath'
             filePath: '$(System.DefaultWorkingDirectory)/drop/RunIntegrationTests_CreateParametersFile.ps1'            
             arguments: '-FunctionUrl $(FunctionUrl) -FunctionApp1Code $(FunctionApp1Code)'
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
         - script: 'npm install newman'
           displayName: 'Install newman'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
         
         - script: 'newman run postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export JunitReport.xml '
           displayName: 'Run postman tests'
-          workingDirectory: '$(System.DefaultWorkingDirectory)'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/drop'
 
         - task: PublishTestResults@2
           displayName: 'Publish test results'
           inputs:
             testResultsFiles: 'JunitReport.xml '
-            searchFolder: '$(System.DefaultWorkingDirectory)'
+            searchFolder: '$(System.DefaultWorkingDirectory)/drop'
             failTaskOnFailedTests: true
 
   # - stage: Staging
