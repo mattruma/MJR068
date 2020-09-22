@@ -13,8 +13,8 @@ Write-Host "Subscription            : $($AzContext.Name)"
 
 $ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
 
-if ($null -eq $ServicePrincipal) { 
-    throw "The service principal $($ServicePrincipalName) doest not exist."
+If ($null -eq $ServicePrincipal) { 
+    throw "The service principal $($ServicePrincipalName) does not exist."
 }
 
 Write-Host "Service Principal Id    : $($ServicePrincipal.Id)"
@@ -22,7 +22,7 @@ Write-Host "Service Principal Id    : $($ServicePrincipal.Id)"
 $ResourceGroupName = "$($ResourcePrefix)-rg"
 $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
 
-if ($null -eq $ResourceGroup) {
+If ($null -eq $ResourceGroup) {
     $ResourceGroup = (New-AzResourceGroup `
         -Name $ResourceGroupName `
         -Location $ResourceGroupLocation)

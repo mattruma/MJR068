@@ -11,6 +11,8 @@ jobs:
   deploy-infrastructure:
     
     runs-on: ubuntu-latest
+    env:
+      SERVICE_PRINCIPALID: ""
 
     steps: 
     - uses: actions/checkout@master
@@ -26,18 +28,26 @@ jobs:
           $ResourceGroupName = "mjr-068-dev-rg"
           $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
           
-          if ($null -eq $ResourceGroup) {
+          If ($null -eq $ResourceGroup) {
               $ResourceGroup = (New-AzResourceGroup `
                   -Name $ResourceGroupName `
                   -Location $ResourceGroupLocation)
           }
+
+          $ServicePrincipal = Get-AzADServicePrincipal -DisplayName $ServicePrincipalName
+
+          If ($null -eq $ServicePrincipal) { 
+              Throw "The service principal $($ServicePrincipalName) does not exist."
+          }
+
+          Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipal.Id"
         azPSVersion: '3.1.0'        
     - uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
         resourceGroupName: mjr-068-dev-rg
         template: ./src/FunctionApp1.Infrastructure/Deploy.json
-        parameters: resourcePrefix=mjr-068-dev servicePrincipalName=mjr-068-sp
+        parameters: resourcePrefix=mjr-068-dev servicePrincipalName=$env:SERVICE_PRINCIPALID
         
   deploy-code:
 
