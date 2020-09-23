@@ -123,7 +123,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
           title: Run stage approval pending FunctionApp - Staging
-          labels: release-approve
+          labels: staging-approve
           assignees: mattruma
           body: "Your approval is required for stage 'Staging' to use environment 'Staging'.
 

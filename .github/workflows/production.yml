@@ -23,7 +23,7 @@ jobs:
       - uses: ./.github/actions/check-issue
         id: CheckIssue
         with:
-          label: release-approved
+          label: production-approved
          
   # deploy-infrastructure:
     
