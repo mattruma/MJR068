@@ -80,7 +80,7 @@ jobs:
   
   run-integration-tests:
   
-    # needs: deploy-code
+    needs: deploy-code
     runs-on: ubuntu-latest
 
     steps:  
