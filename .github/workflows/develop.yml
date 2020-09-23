@@ -105,7 +105,7 @@ jobs:
       run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-dev-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
     - run: npm install newman
     - name: 'Run postman tests' 
-      run: newman run postman_collection.json -e ./src/FunctionApp1.Tests/postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
+      run: newman run ./src/FunctionApp1.Tests/postman_collection.json -e ./src/FunctionApp1.Tests/postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
             
   create-approval-issue:
 
