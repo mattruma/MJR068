@@ -150,3 +150,20 @@ jobs:
 
 
 To approve for deployment to 'Production' add the 'production-approved' label to the GitHub issue."
+
+  close-issue:
+ 
+    runs-on: ubuntu-latest
+    needs: create-approval-issue
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+        working-directory: ./.github/actions/close-issue
+      - uses: ./.github/actions/close-issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          issue_number: ${{ github.event.issue.number }}
