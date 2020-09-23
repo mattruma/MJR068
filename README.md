@@ -20,23 +20,7 @@ This project makes use of three environments: develop, staging and production.
 
 The project includes integration tests using a Postman collection.
 
-In your Azure environment, I would recommend creating a service principal that can deploy resources to your subscription.
-
-I am using `mjr-068` as the prefix and a suffix of the resource type, e.g. `-sp` for service principal.
-
-Use your own naming standards.
-
-The service principal I created was called `mjr-068-sp`.
-
-To create the service principal run `az ad sp create-for-rbac --name SERVICE_PRINCIPAL_NAME`, replacing `SERVICE_PRINCIPAL_NAME` with the name of your service principal.
-
-Capture the output, as you will need this information for Azure DevOps and GitHub Actions.
-
-To deploy the infrastructure, navigate to the `/src/FunctionApp1.Infrastructure` folder and run the following script for the develop environment:
-
-```bash
-.\Deploy.ps1 -ResourcePrefix RESOURCE_PREFIX
-```
+The Git repository is located at <https://github.com/mattruma/MJR068>.
 
 ## Links
 

@@ -2,6 +2,7 @@ Param(
     [String] [Parameter(Mandatory = $true)] $ResourcePrefix,
     [String] $ResourceGroupLocation = "eastus",
     [String] [Parameter(Mandatory = $true)] $ServicePrincipalName,
+    [String] $Tag = "",
     [String] $TemplateFile = "Deploy.json"
 )
 
@@ -38,4 +39,5 @@ New-AzResourceGroupDeployment `
     -Force `
     -Verbose `
     -resourcePrefix $ResourcePrefix `
-    -servicePrincipalId $ServicePrincipal.Id
+    -servicePrincipalId $ServicePrincipal.Id `
+    -tag $Tag
