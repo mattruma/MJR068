@@ -125,11 +125,29 @@ jobs:
     - run: npm install newman
     - name: 'Run postman tests' 
       run: newman run ./src/FunctionApp1.Tests/postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
-     
+
+  add-label-to-issue:
+ 
+    runs-on: ubuntu-latest
+    needs: run-integration-tests 
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+        working-directory: ./.github/actions/add-label-to-issue
+      - uses: ./.github/actions/add-label-to-issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          issue_number: ${{ github.event.issue.number }}
+          labels: production-released
+
   close-issue:
  
     runs-on: ubuntu-latest
-    needs: create-approval-issue
+    needs: add-label-to-issue
 
     steps:
       - uses: actions/checkout@v2
