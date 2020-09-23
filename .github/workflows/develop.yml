@@ -40,12 +40,10 @@ jobs:
               Throw "The service principal $($ServicePrincipalName) does not exist."
           }
 
-          Write-Host $ServicePrincipal.Id
-
           $ServicePrincipalId = $ServicePrincipal.Id
+
           Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipalId"
-        azPSVersion: '3.1.0'             
-    - run: echo "$SERVICE_PRINCIPALID"
+        azPSVersion: '3.1.0'      
     - uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
@@ -68,7 +66,7 @@ jobs:
        shell: pwsh
        run: |
          pushd './.'
-         dotnet build './src/FunctionApp1/*.csproj' --configuration Release --output ./output
+         dotnet build './src/FunctionApp1/' --configuration Release --output ./output
          popd
      - uses: Azure/login@v1
        with:
