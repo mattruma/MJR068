@@ -1,16 +1,34 @@
-name: Develop
+name: Staging
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  issues:
+    types: [labeled]
 
 jobs:
         
+  check-issue-label:
+
+    runs-on: ubuntu-latest
+    
+    outputs:
+      exists: ${{ steps.CheckIssue.outputs.exists }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+        working-directory: ./.github/actions/check-issue
+      - uses: ./.github/actions/check-issue
+        id: CheckIssue
+        with:
+          label: release-approved
+         
   deploy-infrastructure:
     
     runs-on: ubuntu-latest
+    if: needs.check-issue-label.outputs.exists == 'true'
     env:
       SERVICE_PRINCIPALID: ""
 
@@ -25,7 +43,7 @@ jobs:
         inlineScript: |
           $ResourceGroupLocation = "eastus"
           
-          $ResourceGroupName = "mjr-068-dev-rg"
+          $ResourceGroupName = "mjr-068-stg-rg"
           $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
           
           If ($null -eq $ResourceGroup) {
@@ -47,9 +65,9 @@ jobs:
     - uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
-        resourceGroupName: mjr-068-dev-rg
+        resourceGroupName: mjr-068-stg-rg
         template: ./src/FunctionApp1.Infrastructure/Deploy.json
-        parameters: resourcePrefix=mjr-068-dev servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
+        parameters: resourcePrefix=mjr-068-stg servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
         
   deploy-code:
 
@@ -75,7 +93,7 @@ jobs:
      - name: 'Deploy code'
        uses: Azure/functions-action@v1
        with:
-         app-name: mjr-068-dev-func
+         app-name: mjr-068-stg-func
          package: './output'
   
   run-integration-tests:
@@ -91,18 +109,18 @@ jobs:
         enable-AzPSSession: true 
     - uses: Azure/get-keyvault-secrets@v1.0
       with:
-        keyvault: "mjr-068-dev-kv"
+        keyvault: "mjr-068-stg-kv"
         secrets: 'StorageConnectionString1,FunctionApp1Code' 
       id: GetSecrets
     - uses: azure/powershell@v1
       with:
         inlineScript: |
-          $ResourceGroupName = "mjr-068-dev-rg"
+          $ResourceGroupName = "mjr-068-stg-rg"
           
-          Update-AzFunctionAppSetting -Name mjr-068-dev-func -ResourceGroupName $ResourceGroupName -AppSetting @{"StorageConnectionString" = "${{ steps.GetSecrets.outputs.StorageConnectionString1 }}"}
+          Update-AzFunctionAppSetting -Name mjr-068-stg-func -ResourceGroupName $ResourceGroupName -AppSetting @{"StorageConnectionString" = "${{ steps.GetSecrets.outputs.StorageConnectionString1 }}"}
         azPSVersion: '3.1.0'   
     - name: 'Build postman environment file'           
-      run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-dev-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
+      run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-stg-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
     - run: npm install newman
     - name: 'Run postman tests' 
       run: newman run ./src/FunctionApp1.Tests/postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
@@ -122,10 +140,10 @@ jobs:
       - uses: ./.github/actions/create-issue
         with:
           token: ${{ secrets.GITHUB_TOKEN }} 
-          title: Run stage approval pending FunctionApp - Staging
-          labels: release-approve
+          title: Run stage approval pending FunctionApp - Production
+          labels: production-approve
           assignees: mattruma
-          body: "Your approval is required for stage 'Staging' to use environment 'Staging'.
+          body: "Your approval is required for stage 'Production' to use environment 'Production'.
 
 
-To approve for deployment to 'Staging' add the 'staging-approved' label to the GitHub issue."
+To approve for deployment to 'Production' add the 'production-approved' label to the GitHub issue."
