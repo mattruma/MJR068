@@ -149,10 +149,28 @@ jobs:
 
 To approve for deployment to 'Production' add the 'production-approved' label to the GitHub issue."
 
+  add-label-to-issue:
+ 
+    needs: run-integration-tests 
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+        working-directory: ./.github/actions/add-label-to-issue
+      - uses: ./.github/actions/add-label-to-issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          issue_number: ${{ github.event.issue.number }}
+          labels: staging-released
+
   close-issue:
  
     runs-on: ubuntu-latest
-    needs: create-approval-issue
+    needs: [create-approval-issue, add-label-to-issue]
 
     steps:
       - uses: actions/checkout@v2
