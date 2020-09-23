@@ -1,131 +1,131 @@
-# name: Develop
+name: Develop
 
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-# jobs:
+jobs:
         
-#   deploy-infrastructure:
+  # deploy-infrastructure:
     
-#     runs-on: ubuntu-latest
-#     env:
-#       SERVICE_PRINCIPALID: ""
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     SERVICE_PRINCIPALID: ""
 
-#     steps: 
-#     - uses: actions/checkout@master
-#     - uses: Azure/login@v1
-#       with:
-#         creds: ${{ secrets.AZURE_CREDENTIALS }} 
-#         enable-AzPSSession: true 
-#     - uses: azure/powershell@v1
-#       with:
-#         inlineScript: |
-#           $ResourceGroupLocation = "eastus"
+  #   steps: 
+  #   - uses: actions/checkout@master
+  #   - uses: Azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }} 
+  #       enable-AzPSSession: true 
+  #   - uses: azure/powershell@v1
+  #     with:
+  #       inlineScript: |
+  #         $ResourceGroupLocation = "eastus"
           
-#           $ResourceGroupName = "mjr-068-dev-rg"
-#           $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
+  #         $ResourceGroupName = "mjr-068-dev-rg"
+  #         $ResourceGroup = (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue)
           
-#           If ($null -eq $ResourceGroup) {
-#               $ResourceGroup = (New-AzResourceGroup `
-#                   -Name $ResourceGroupName `
-#                   -Location $ResourceGroupLocation)
-#           }
+  #         If ($null -eq $ResourceGroup) {
+  #             $ResourceGroup = (New-AzResourceGroup `
+  #                 -Name $ResourceGroupName `
+  #                 -Location $ResourceGroupLocation)
+  #         }
 
-#           $ServicePrincipal = Get-AzADServicePrincipal -DisplayName "mjr-068-sp"
+  #         $ServicePrincipal = Get-AzADServicePrincipal -DisplayName "mjr-068-sp"
 
-#           If ($null -eq $ServicePrincipal) { 
-#               Throw "The service principal $($ServicePrincipalName) does not exist."
-#           }
+  #         If ($null -eq $ServicePrincipal) { 
+  #             Throw "The service principal $($ServicePrincipalName) does not exist."
+  #         }
 
-#           $ServicePrincipalId = $ServicePrincipal.Id
+  #         $ServicePrincipalId = $ServicePrincipal.Id
 
-#           Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipalId"
-#         azPSVersion: '3.1.0'      
-#     - uses: azure/arm-deploy@v1
-#       with:
-#         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
-#         resourceGroupName: mjr-068-dev-rg
-#         template: ./src/FunctionApp1.Infrastructure/Deploy.json
-#         parameters: resourcePrefix=mjr-068-dev servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
+  #         Write-Output "::set-env name=SERVICE_PRINCIPALID::$ServicePrincipalId"
+  #       azPSVersion: '3.1.0'      
+  #   - uses: azure/arm-deploy@v1
+  #     with:
+  #       subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
+  #       resourceGroupName: mjr-068-dev-rg
+  #       template: ./src/FunctionApp1.Infrastructure/Deploy.json
+  #       parameters: resourcePrefix=mjr-068-dev servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
         
-#   deploy-code:
+  # deploy-code:
 
-#     needs: deploy-infrastructure
-#     runs-on: ubuntu-latest
+  #   needs: deploy-infrastructure
+  #   runs-on: ubuntu-latest
 
-#     steps:
-#      - uses: actions/checkout@v2
-#      - name: Setup .NET Core
-#        uses: actions/setup-dotnet@v1
-#        with:
-#          dotnet-version: 3.1.301       
-#      - name: 'Run dotnet'
-#        shell: pwsh
-#        run: |
-#          pushd './.'
-#          dotnet build './src/FunctionApp1/' --configuration Release --output ./output
-#          popd
-#      - uses: Azure/login@v1
-#        with:
-#          creds: ${{ secrets.AZURE_CREDENTIALS }} 
-#          enable-AzPSSession: true 
-#      - name: 'Deploy code'
-#        uses: Azure/functions-action@v1
-#        with:
-#          app-name: mjr-068-dev-func
-#          package: './output'
+  #   steps:
+  #    - uses: actions/checkout@v2
+  #    - name: Setup .NET Core
+  #      uses: actions/setup-dotnet@v1
+  #      with:
+  #        dotnet-version: 3.1.301       
+  #    - name: 'Run dotnet'
+  #      shell: pwsh
+  #      run: |
+  #        pushd './.'
+  #        dotnet build './src/FunctionApp1/' --configuration Release --output ./output
+  #        popd
+  #    - uses: Azure/login@v1
+  #      with:
+  #        creds: ${{ secrets.AZURE_CREDENTIALS }} 
+  #        enable-AzPSSession: true 
+  #    - name: 'Deploy code'
+  #      uses: Azure/functions-action@v1
+  #      with:
+  #        app-name: mjr-068-dev-func
+  #        package: './output'
   
-#   run-integration-tests:
+  # run-integration-tests:
   
-#     needs: deploy-code
-#     runs-on: ubuntu-latest
+  #   needs: deploy-code
+  #   runs-on: ubuntu-latest
 
-#     steps:  
-#     - uses: actions/checkout@master
-#     - uses: Azure/login@v1
-#       with:
-#         creds: ${{ secrets.AZURE_CREDENTIALS }} 
-#         enable-AzPSSession: true 
-#     - uses: Azure/get-keyvault-secrets@v1.0
-#       with:
-#         keyvault: "mjr-068-dev-kv"
-#         secrets: 'StorageConnectionString1,FunctionApp1Code' 
-#       id: GetSecrets
-#     - uses: azure/powershell@v1
-#       with:
-#         inlineScript: |
-#           $ResourceGroupName = "mjr-068-dev-rg"
+  #   steps:  
+  #   - uses: actions/checkout@master
+  #   - uses: Azure/login@v1
+  #     with:
+  #       creds: ${{ secrets.AZURE_CREDENTIALS }} 
+  #       enable-AzPSSession: true 
+  #   - uses: Azure/get-keyvault-secrets@v1.0
+  #     with:
+  #       keyvault: "mjr-068-dev-kv"
+  #       secrets: 'StorageConnectionString1,FunctionApp1Code' 
+  #     id: GetSecrets
+  #   - uses: azure/powershell@v1
+  #     with:
+  #       inlineScript: |
+  #         $ResourceGroupName = "mjr-068-dev-rg"
           
-#           Update-AzFunctionAppSetting -Name mjr-068-dev-func -ResourceGroupName $ResourceGroupName -AppSetting @{"StorageConnectionString" = "${{ steps.GetSecrets.outputs.StorageConnectionString1 }}"}
-#         azPSVersion: '3.1.0'   
-#     - name: 'Build postman environment file'           
-#       run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-dev-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
-#     - run: npm install newman
-#     - name: 'Run postman tests' 
-#       run: newman run ./src/FunctionApp1.Tests/postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
+  #         Update-AzFunctionAppSetting -Name mjr-068-dev-func -ResourceGroupName $ResourceGroupName -AppSetting @{"StorageConnectionString" = "${{ steps.GetSecrets.outputs.StorageConnectionString1 }}"}
+  #       azPSVersion: '3.1.0'   
+  #   - name: 'Build postman environment file'           
+  #     run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-dev-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
+  #   - run: npm install newman
+  #   - name: 'Run postman tests' 
+  #     run: newman run ./src/FunctionApp1.Tests/postman_collection.json -e postman_environment.json --reporters cli,junit --reporter-junit-export ./JunitReport.xml
             
-#   create-approval-issue:
+  create-approval-issue:
 
-#     needs: run-integration-tests
-#     runs-on: ubuntu-latest
+    # needs: run-integration-tests
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: '12.x'
-#       - run: npm install
-#         working-directory: ./.github/actions/create-issue
-#       - uses: ./.github/actions/create-issue
-#         with:
-#           token: ${{ secrets.GITHUB_TOKEN }} 
-#           title: Run stage approval pending FunctionApp - Staging
-#           labels: release-approve
-#           assignees: mattruma
-#           body: "Your approval is required for stage 'Staging' to use environment 'Staging'.
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+        working-directory: ./.github/actions/create-issue
+      - uses: ./.github/actions/create-issue
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          title: Run stage approval pending FunctionApp - Staging
+          labels: release-approve
+          assignees: mattruma
+          body: "Your approval is required for stage 'Staging' to use environment 'Staging'.
 
 
-# To approve for deployment to 'Staging' add the 'staging-approved' label to the GitHub issue."
+To approve for deployment to 'Staging' add the 'staging-approved' label to the GitHub issue."
