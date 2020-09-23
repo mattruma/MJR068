@@ -1,5 +1,5 @@
 trigger:
-- devops-yaml
+- donotrun
 
 pool:
   vmImage: 'ubuntu-latest'
