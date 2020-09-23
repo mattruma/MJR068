@@ -28,6 +28,7 @@ jobs:
   deploy-infrastructure:
     
     runs-on: ubuntu-latest
+    needs: check-issue-label
     if: needs.check-issue-label.outputs.exists == 'true'
     env:
       SERVICE_PRINCIPALID: ""
