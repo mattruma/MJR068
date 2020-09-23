@@ -7,10 +7,6 @@
         },
         "servicePrincipalId": {
             "type": "String"
-        },
-        "tag": {
-            "type": "String",
-            "defaultValue": ""
         }
     },
     "variables": {
@@ -28,7 +24,6 @@
             "apiVersion": "2019-06-01",
             "name": "[variables('storageAccountName')]",
             "location": "[resourceGroup().location]",
-            "tags": "[parameters('tag')]",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"

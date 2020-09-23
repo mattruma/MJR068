@@ -2,7 +2,7 @@ Param(
     [String] [Parameter(Mandatory = $true)] $ResourcePrefix,
     [String] $ResourceGroupLocation = "eastus",
     [String] [Parameter(Mandatory = $true)] $ServicePrincipalName,
-    [String] $Tag = "",
+    [String] $Author = "N/A",
     [String] $TemplateFile = "Deploy.json"
 )
 
@@ -28,6 +28,7 @@ If ($null -eq $ResourceGroup) {
         -Name $ResourceGroupName `
         -Location $ResourceGroupLocation)
 }
+$DeployedOn = Get-Date
 
 Write-Host "Resource Group          : $($ResourceGroup.ResourceGroupName)"
 Write-Host "Resource Group Location : $($ResourceGroup.Location)"
@@ -39,5 +40,6 @@ New-AzResourceGroupDeployment `
     -Force `
     -Verbose `
     -resourcePrefix $ResourcePrefix `
-    -servicePrincipalId $ServicePrincipal.Id `
-    -tag $Tag
+    -servicePrincipalId $ServicePrincipal.Id     
+
+Set-AzResourceGroup -Name $ResourceGroupName -Tag @{DeployedBy = "$($Author)"; DeployedOn = "$($DeployedOn)" }
