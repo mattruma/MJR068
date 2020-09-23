@@ -51,7 +51,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTIONID }}
         resourceGroupName: mjr-068-dev-rg
         template: ./src/FunctionApp1.Infrastructure/Deploy.json
-        parameters: resourcePrefix=mjr-068-dev servicePrincipalId=$SERVICE_PRINCIPALID
+        parameters: resourcePrefix=mjr-068-dev servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
         
   deploy-code:
 
