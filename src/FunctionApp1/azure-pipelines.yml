@@ -59,7 +59,7 @@ stages:
 
     - job: DeployInfrastructure
       displayName: Deploy infrastructure
-
+      
       steps:
 
       - task: DownloadBuildArtifacts@0
@@ -74,7 +74,7 @@ stages:
         inputs:
           azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
-          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
 
     - deployment: DeployCode
@@ -175,7 +175,7 @@ stages:
         inputs:
           azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
-          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-stg -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-stg -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
 
     - deployment: DeployCode
@@ -276,7 +276,7 @@ stages:
         inputs:
           azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
-          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-prd -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp'
+          ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-prd -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
 
     - deployment: DeployCode

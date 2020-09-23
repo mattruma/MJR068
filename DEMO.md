@@ -146,8 +146,7 @@ Our YAML pipeline will include BOTH the build and release pipelines of our previ
 
 3. Navigate to the YAML file at <https://github.com/mattruma/MJR068/blob/master/src/FunctionApp1/azure-pipelines.yml>.
 
-    1. Starts with **Triggers** <https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#triggers>
-    
+    1. Starts with **Triggers** <https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#triggers>  
     2. Consists if **Stages**, **Jobs** and **Steps**.
 
         1. Steps are made of Tasks that execute sequentially.
@@ -160,12 +159,18 @@ Our YAML pipeline will include BOTH the build and release pipelines of our previ
 
         2. **Stages** and **Jobs** can include a `dependsOn` to control when the **Stage** or **Job** will execute.
 
+        3. For code deployment we are using a deployment job which allows for an `environment` to be assigned, which will allow for the approval gating.
+
     5. Sometimes the Function App is not available when the integration tests run, so there is another step that runs a PowerShell script to verify the Function App is available, see <https://github.com/mattruma/MJR068/blob/master/src/FunctionApp1.Tests/PingFunctionApp.ps1>.
 
     6. The `Develop` job is duplicated for the `Staging` and `Production` jobs BUT this could be simplified using Templates.
 
         1. <https://jpearson.blog/2019/10/01/using-templates-in-yaml-pipelines-in-azure-devops/>
         2. <https://docs.microsoft.com/en-us/azure/devops/pipelines/process/templates?view=azure-devops>
+
+    7. Navigate to the pipeline at <https://dev.azure.com/maruma/MJR068/_build?definitionId=42&_a=summary>.
+
+        1. Show how you can see the length each step ran, this can help streamline the pipeline.
 
 ## Run a workflow with GitHub Actions
 
