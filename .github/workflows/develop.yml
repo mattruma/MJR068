@@ -92,14 +92,14 @@ jobs:
     - uses: Azure/get-keyvault-secrets@v1.0
       with:
         keyvault: "mjr-068-dev-kv"
-        secrets: 'CosmosConnectionString1,FunctionApp1Code' 
+        secrets: 'StorageConnectionString1,FunctionApp1Code' 
       id: GetSecrets
     - uses: azure/powershell@v1
       with:
         inlineScript: |
           $ResourceGroupName = "mjr-068-dev-rg"
           
-          Update-AzFunctionAppSetting -Name mjr-068-dev-func -ResourceGroupName $ResourceGroupName -AppSetting @{"CosmosConnectionString" = "${{ steps.GetSecrets.outputs.CosmosConnectionString1 }}"}
+          Update-AzFunctionAppSetting -Name mjr-068-dev-func -ResourceGroupName $ResourceGroupName -AppSetting @{"StorageConnectionString" = "${{ steps.GetSecrets.outputs.StorageConnectionString1 }}"}
         azPSVersion: '3.1.0'   
     - name: 'Build postman environment file'           
       run: pwsh -command "./src/FunctionApp1.Tests/RunIntegrationTests_CreateParametersFile.ps1 -FunctionUrl 'mjr-068-dev-func.azurewebsites.net' -FunctionApp1Code ${{ steps.GetSecrets.outputs.FunctionApp1Code }}"
