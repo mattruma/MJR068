@@ -70,7 +70,7 @@ jobs:
          popd
      - uses: Azure/login@v1
        with:
-         creds: ${{ secrets.DEVELOP_AZURECREDENTIALS }} 
+         creds: ${{ secrets.AZURE_CREDENTIALS }} 
          enable-AzPSSession: true 
      - name: 'Deploy code'
        uses: Azure/functions-action@v1
@@ -87,7 +87,7 @@ jobs:
     - uses: actions/checkout@master
     - uses: Azure/login@v1
       with:
-        creds: ${{ secrets.DEVELOP_AZURECREDENTIALS }} 
+        creds: ${{ secrets.AZURE_CREDENTIALS }} 
         enable-AzPSSession: true 
     - uses: Azure/get-keyvault-secrets@v1.0
       with:
