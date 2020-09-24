@@ -150,6 +150,14 @@ When the developer adds a `staging-approved` label, `staging.yml` will executed,
 
 Production works the same as staging but the tags are prefixed with `production-`.
 
+Created (4) custom GitHub Actions to add a label to an issue, check a label on a issue, close an issue and create an issue.
+
+There are custom actions available at <https://github.com/marketplace?type=actions>.
+
+The credentials are stored in **Secrets** see <https://github.com/mattruma/MJR068/settings/secrets>.
+
+There are some differences with the YAML, e.g. have to use an action to get Key Vault secrets.
+
 ## Questions
 
 How do I not trigger on certain files or trigger on certain files?

@@ -48,7 +48,14 @@ jobs:
         resourceGroupName: mjr-068-dev-rg
         template: ./src/FunctionApp1.Infrastructure/Deploy.json
         parameters: resourcePrefix=mjr-068-dev servicePrincipalId=${{ env.SERVICE_PRINCIPALID }}
-        
+
+    - uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          $DeployedOn = Get-Date
+
+          Set-AzResourceGroup -Name $ResourceGroupName -Tag @{DeployedBy = "github-actions"; DeployedOn = "$($DeployedOn)" }
+        azPSVersion: '3.1.0'           
   deploy-code:
 
     needs: deploy-infrastructure

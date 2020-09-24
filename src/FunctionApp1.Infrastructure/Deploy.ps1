@@ -28,6 +28,7 @@ If ($null -eq $ResourceGroup) {
         -Name $ResourceGroupName `
         -Location $ResourceGroupLocation)
 }
+
 $DeployedOn = Get-Date
 
 Write-Host "Resource Group          : $($ResourceGroup.ResourceGroupName)"
