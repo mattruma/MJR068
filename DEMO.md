@@ -170,5 +170,6 @@ This was my first venture into GitHub Actions, so there are probably some perfor
 
 ## Questions
 
-How do I not trigger on certain files or trigger on certain files?
+How do I NOT trigger on certain paths or file changes?
 
+How does this work for DataOps?
