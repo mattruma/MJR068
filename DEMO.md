@@ -136,6 +136,20 @@ Our YAML pipeline will include BOTH the build and release pipelines of our previ
 
 ## Run a workflow with GitHub Actions
 
+Supports **Jobs** and **Steps**.
+
+For GitHub Actions we created (3) yml files, one for `Develop`, another for `Staging` and another for `Production`.
+
+Why (3) files?
+
+There is no approval workflow available yet in GitHub Actions so we will use a combination of custom actions and issues.
+
+When `master` branch is checked in `develop.yml` will execute, when the infrastructure, code and integration tests jobs are complete an issue will be created with a label of `staging-approve`.
+
+When the developer adds a `staging-approved` label, `staging.yml` will executed, when the infrastructure, code and integration tests jobs are complete the issue will be tagged with `staging-released` label and closed, and then an issue will be created with a label of `production-approve`.
+
+Production works the same as staging but the tags are prefixed with `production-`.
+
 ## Questions
 
 How do I not trigger on certain files or trigger on certain files?
