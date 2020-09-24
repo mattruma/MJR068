@@ -127,6 +127,8 @@ Better security control.
 * [Let’s Hack a Pipeline: Shared Infrastructure](https://devblogs.microsoft.com/devops/pipeline-shared-infrastructure/)
 * [Let’s Hack a Pipeline: Stealing Another Repo](https://devblogs.microsoft.com/devops/pipeline-stealing-another-repo/)
 
+NO SECRETS in the code.
+
 What about converting from Classic to YAML? You can try to leverage snippets in the Classic job but there is a conversion tool in development that is due out in the next quarter or two.
 
 What does this look like in YAML?
