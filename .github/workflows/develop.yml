@@ -5,12 +5,10 @@ on:
     branches:    
     - master
     paths-ignore:
-    - DEMO.md
-    - README.md
-    - .github/*
-    - docs/*
-    - src/FunctionApp1/README.md
-    - src/FunctionApp1/azure-pipelines.yml
+    - '**.md'
+    - '.github/*'
+    - 'docs/*'
+    - 'src/FunctionApp1/azure-pipelines.yml'
 
 jobs:
         
