@@ -121,6 +121,8 @@ The release pipeline is setup to auto deploy to the **Develop** environment and 
 
 Why YAML? Because it is code and can be stored in source control.
 
+What about converting from Classic to YAML? You can try to leverage snippets in the Classic job but there is a conversion tool in development that is due out in the next quarter or two.
+
 What does this look like in YAML?
 
 See <https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema> for details on YAML schema.
@@ -195,4 +197,4 @@ How do I NOT trigger on certain paths or file changes?
 
 How does this work for DataOps?
 
-Just adding this line to try for force a pipeline to trigger or NOT trigger.
+<!-- Just adding this line to try for force a pipeline to trigger or NOT trigger. -->

@@ -26,7 +26,6 @@ The Git repository is located at <https://github.com/mattruma/MJR068>.
 
 [Creating an Azure Service Principal for use with an Azure Resource Manager service connection](https://azuredevopslabs.com/labs/devopsserver/azureserviceprincipal/)
 
-[]()
 [Azure Pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/get-started/pipelines-get-started?view=azure-devops)
 
 [YAML schema reference](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema)
