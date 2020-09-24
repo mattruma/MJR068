@@ -53,6 +53,7 @@ jobs:
       with:
         inlineScript: |
           $DeployedOn = Get-Date
+          $ResourceGroupName = "mjr-068-dev-rg"
 
           Set-AzResourceGroup -Name $ResourceGroupName -Tag @{DeployedBy = "github-actions"; DeployedOn = "$($DeployedOn)" }
         azPSVersion: '3.1.0'           
