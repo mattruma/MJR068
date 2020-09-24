@@ -167,7 +167,6 @@ This was my first venture into GitHub Actions, so there are probably some perfor
 1. Reusable templates, the deployment of the infrastructure, code and integration tests are the same.
 2. Try to login to Azure only once per workflow.
 
-
 ## Questions
 
 How do I NOT trigger on certain paths or file changes?
