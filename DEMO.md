@@ -172,3 +172,5 @@ This was my first venture into GitHub Actions, so there are probably some perfor
 How do I NOT trigger on certain paths or file changes?
 
 How does this work for DataOps?
+
+Just adding this line to try for force a pipeline to trigger or NOT trigger.
