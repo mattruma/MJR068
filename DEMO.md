@@ -2,6 +2,8 @@
 
 Notes for successfully running the demo.
 
+* [Azure] (#azure)
+
 ## Azure
 
 Navigate to <https://ms.portal.azure.com/#@microsoft.onmicrosoft.com/resource/subscriptions/2164386e-942c-4314-b71e-d4dc327856c5/resourceGroups/mjr-068-dev-rg/overview>
@@ -107,6 +109,8 @@ The release pipeline is setup to auto deploy to the **Develop** environment and 
 10. Disable continous integration at <https://dev.azure.com/maruma/MJR068/_apps/hub/ms.vss-ciworkflow.build-ci-hub?_a=edit-build-definition&id=41&view=Tab_Triggers> before demo of YAML syntax.
 
 ## Define pipelines using YAML syntax
+
+Why YAML? Because it is code and can be stored in source control.
 
 What does this look like in YAML?
 
