@@ -2,7 +2,16 @@
 
 Notes for successfully running the demo.
 
-* [Azure] (#azure)
+* [Azure](#azure)
+* [Project](#project)
+  * [FunctionApp1](functionapp1)
+  * [FunctionApp1.Infrastructure](#functionapp1infrastructure)
+  * [FunctionApp1.Tests](#functionapp1tests)
+* [Define pipelines using the Classic interface](#define-pipelines-using-the-classic-interface)
+  * [Build pipeline](#build-pipeline)
+  * [Release pipeline](#release-pipeline)
+* [Define pipelines using YAML syntax](#define-pipelines-using-yaml-syntax)
+* [Run a workflow with GitHub Actions](#run-a-workflow-with-github-actions)
 
 ## Azure
 

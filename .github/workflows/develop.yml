@@ -3,7 +3,7 @@ name: Develop
 on:
   push:
     branches:    
-    - master
+    - none
     paths-ignore:
     - '**.md'
     - '.github/*'
