@@ -1,5 +1,13 @@
 trigger:
-  - none
+  branches:
+      include:
+      - none
+  paths:
+    exclude:
+    - DEMO.md
+    - README.md
+    - .github/*
+    - docs/*
 
 pool:
   vmImage: 'ubuntu-latest'

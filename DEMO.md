@@ -140,6 +140,8 @@ Supports **Jobs** and **Steps**.
 
 For GitHub Actions we created (3) yml files, one for `Develop`, another for `Staging` and another for `Production`.
 
+They workflows are stored in a `.github` folder in the repository.
+
 Why (3) files?
 
 There is no approval workflow available yet in GitHub Actions so we will use a combination of custom actions and issues.
@@ -157,6 +159,14 @@ There are custom actions available at <https://github.com/marketplace?type=actio
 The credentials are stored in **Secrets** see <https://github.com/mattruma/MJR068/settings/secrets>.
 
 There are some differences with the YAML, e.g. have to use an action to get Key Vault secrets.
+
+The login to Azure takes forever, there is an issue opened for this at <https://github.com/Azure/login/issues/20>.
+
+This was my first venture into GitHub Actions, so there are probably some performance improvements I can make:
+
+1. Reusable templates, the deployment of the infrastructure, code and integration tests are the same.
+2. Try to login to Azure only once per workflow.
+
 
 ## Questions
 
