@@ -16,6 +16,8 @@ namespace FunctionApp1
             services.AddHttpClient();
 
             services.AddSingleton<IGameImport, GameImport>();
+
+            // TODO: Add/remove to trigger builds
         }
     }
 }

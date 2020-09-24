@@ -136,6 +136,8 @@ Our YAML pipeline will include BOTH the build and release pipelines of our previ
 
 ## Run a workflow with GitHub Actions
 
+For a quick introduction into GitHub Actions see <https://docs.github.com/en/actions/learn-github-actions/introduction-to-github-actions>.
+
 Supports **Jobs** and **Steps**.
 
 For GitHub Actions we created (3) yml files, one for `Develop`, another for `Staging` and another for `Production`.
@@ -152,20 +154,25 @@ When the developer adds a `staging-approved` label, `staging.yml` will executed,
 
 Production works the same as staging but the tags are prefixed with `production-`.
 
-Created (4) custom GitHub Actions to add a label to an issue, check a label on a issue, close an issue and create an issue.
+Created (4) custom GitHub Actions to add a label to an issue, check a label on a issue, close an issue and create an issue see <https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action>.
 
 There are custom actions available at <https://github.com/marketplace?type=actions>.
 
-The credentials are stored in **Secrets** see <https://github.com/mattruma/MJR068/settings/secrets>.
+Some of the actions have `outputs` that can be used by other **Jobs**.
+
+The credentials are stored in **Secrets** see <https://github.com/mattruma/MJR068/settings/secrets> and <https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#storing-secrets>.
 
 There are some differences with the YAML, e.g. have to use an action to get Key Vault secrets.
+
+**Jobs** use `needs` instead of `dependsOn`.
 
 The login to Azure takes forever, there is an issue opened for this at <https://github.com/Azure/login/issues/20>.
 
 This was my first venture into GitHub Actions, so there are probably some performance improvements I can make:
 
-1. Reusable templates, the deployment of the infrastructure, code and integration tests are the same.
+1. Reusable templates, the deployment of the infrastructure, code and integration tests are the same see <https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization#creating-a-workflow-template>.
 2. Try to login to Azure only once per workflow.
+3. Leverage Debugging see <https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging> for troubleshooting.
 
 ## Questions
 
