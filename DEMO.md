@@ -174,6 +174,8 @@ This was my first venture into GitHub Actions, so there are probably some perfor
 2. Try to login to Azure only once per workflow.
 3. Leverage Debugging see <https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging> for troubleshooting.
 
+To turn off auto deployment just set the trigger branch to `none`.
+
 ## Questions
 
 How do I NOT trigger on certain paths or file changes?
