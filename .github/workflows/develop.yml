@@ -1,14 +1,15 @@
 name: Develop
 
 on:
-  push:
-    branches:    
-    - none
-    paths-ignore:
-    - '**.md'
-    - '.github/*'
-    - 'docs/*'
-    - 'src/FunctionApp1/azure-pipelines.yml'
+  workflow_dispatch:
+  # push:
+  #   branches:    
+  #   - none
+  #   paths-ignore:
+  #   - '**.md'
+  #   - '.github/*'
+  #   - 'docs/*'
+  #   - 'src/FunctionApp1/azure-pipelines.yml'
 
 jobs:
         
