@@ -20,9 +20,11 @@ This project makes use of three environments: develop, staging and production.
 
 The project includes integration tests using a Postman collection.
 
-The Git repository is located at <https://github.com/mattruma/MJR068>.
+* GitHub repository <https://github.com/mattruma/MJR068>.
 
-The Azure DevOps project is located at <https://dev.azure.com/maruma/MJR068>.
+* Azure DevOps project <https://dev.azure.com/maruma/MJR068>.
+
+* PowerPoint presentation [docs/Presentation.pdf](docs/Presentation.pdf).
 
 ## Links
 
