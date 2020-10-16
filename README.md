@@ -22,6 +22,8 @@ The project includes integration tests using a Postman collection.
 
 The Git repository is located at <https://github.com/mattruma/MJR068>.
 
+The Azure DevOps project is located at <https://dev.azure.com/maruma/MJR068>.
+
 ## Links
 
 [Creating an Azure Service Principal for use with an Azure Resource Manager service connection](https://azuredevopslabs.com/labs/devopsserver/azureserviceprincipal/)
