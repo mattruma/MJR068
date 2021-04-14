@@ -80,7 +80,7 @@ stages:
       - task: AzurePowerShell@5
         displayName: 'Deploy infrastructure'
         inputs:
-          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          azureSubscription: '$(SubscriptionId)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
           ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-dev -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
@@ -105,7 +105,7 @@ stages:
             - task: AzureFunctionApp@1
               displayName: 'Deploy function app'
               inputs:
-                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                azureSubscription: '$(SubscriptionId)'
                 appType: 'functionApp'
                 appName: '$(ResourcePrefix)-dev-func'
                 appSettings: '-StorageConnectionString $(StorageConnectionString1)'
@@ -181,7 +181,7 @@ stages:
       - task: AzurePowerShell@5
         displayName: 'Deploy infrastructure'
         inputs:
-          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          azureSubscription: '$(SubscriptionId)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
           ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-stg -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
@@ -206,7 +206,7 @@ stages:
             - task: AzureFunctionApp@1
               displayName: 'Deploy function app'
               inputs:
-                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                azureSubscription: '$(SubscriptionId)'
                 appType: 'functionApp'
                 appName: '$(ResourcePrefix)-stg-func'
                 appSettings: '-StorageConnectionString $(StorageConnectionString1)'
@@ -282,7 +282,7 @@ stages:
       - task: AzurePowerShell@5
         displayName: 'Deploy infrastructure'
         inputs:
-          azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+          azureSubscription: '$(SubscriptionId)'
           ScriptPath: '$(System.DefaultWorkingDirectory)/drop/Deploy.ps1'
           ScriptArguments: '-ResourcePrefix $(ResourcePrefix)-prd -ResourceGroupLocation $(ResourceGroupLocation) -TemplateFile $(System.DefaultWorkingDirectory)/drop/Deploy.json -ServicePrincipalName $(ResourcePrefix)-sp -Author azure-pipelines.yml'
           azurePowerShellVersion: LatestVersion   
@@ -307,7 +307,7 @@ stages:
             - task: AzureFunctionApp@1
               displayName: 'Deploy function app'
               inputs:
-                azureSubscription: 'Microsoft Azure Internal Consumption - maruma ($(ResourcePrefix)-sp)'
+                azureSubscription: '$(SubscriptionId)'
                 appType: 'functionApp'
                 appName: '$(ResourcePrefix)-prd-func'
                 appSettings: '-StorageConnectionString $(StorageConnectionString1)'

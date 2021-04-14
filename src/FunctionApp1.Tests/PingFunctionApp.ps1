@@ -1,5 +1,5 @@
 Param(
-    [String] [Parameter(Mandatory = $true)] $FunctionUrl
+    [String] [Parameter(Mandatory = $true)] $Url
 )
 
 $StatusCode = 0
@@ -13,7 +13,8 @@ Do
     Write-Host ""
     Write-Host "Pinging $($FunctionUrl)."
 
-    $StatusCode = (Invoke-WebRequest -URI $FunctionUrl).StatusCode
+    $Response = (Invoke-WebRequest -URI $FunctionUrl)
+    $StatusCode = $Response.StatusCode
     
     Write-Host "Responded with status code $($StatusCode)." 
 
