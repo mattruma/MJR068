@@ -1,5 +1,5 @@
 Param(
-    [String] [Parameter(Mandatory = $true)] $Url
+    [String] [Parameter(Mandatory = $true)] $FunctionUrl
 )
 
 $StatusCode = 0
